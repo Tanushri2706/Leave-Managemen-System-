@@ -1,0 +1,161 @@
+/* ---------- RESET ---------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* ---------- BODY ---------- */
+body {
+    background: #f4f6f9;
+    color: #333;
+}
+
+/* ---------- NAVBAR ---------- */
+.navbar {
+    background: #2c3e50;
+    padding: 12px;
+    text-align: center;
+}
+
+.navbar a {
+    color: white;
+    margin: 0 15px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.navbar a:hover {
+    color: #f1c40f;
+}
+
+/* ---------- CONTAINER ---------- */
+.container {
+    padding: 20px;
+}
+
+/* ---------- HEADINGS ---------- */
+h2 {
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* ---------- FORM ---------- */
+.leave-form {
+    width: 40%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.leave-form input,
+.leave-form select,
+.leave-form textarea {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.leave-form button {
+    background: #2c3e50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.leave-form button:hover {
+    background: #34495e;
+}
+
+/* ---------- TABLE ---------- */
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background: white;
+}
+
+th {
+    background: #34495e;
+    color: white;
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
+    text-align: center;
+}
+
+tr:nth-child(even) {
+    background: #f2f2f2;
+}
+
+/* ---------- STATUS ---------- */
+.approved {
+    color: green;
+    font-weight: bold;
+}
+
+.rejected {
+    color: red;
+    font-weight: bold;
+}
+
+.pending {
+    color: orange;
+    font-weight: bold;
+}
+
+/* ---------- MANAGER ---------- */
+.top-employee {
+    text-align: center;
+    margin: 20px;
+    padding: 10px;
+    background: #ecf0f1;
+    border-radius: 8px;
+}
+
+.search-form {
+    width: 50%;
+    margin: auto;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.search-form input {
+    padding: 8px;
+    width: 70%;
+}
+
+/* ---------- BUTTONS ---------- */
+.btn {
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+}
+
+.approve-btn {
+    background: green;
+}
+
+.reject-btn {
+    background: red;
+}
+.card {
+    width: 40%;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    color: black;
+}

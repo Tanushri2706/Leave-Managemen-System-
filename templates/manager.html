@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+
+{% block title %}Manager Dashboard{% endblock %}
+
+{% block content %}
+<style>
+    .navbar {
+        background: rgba(255, 255, 255, 0.64) !important;
+        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.10);
+        border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+        backdrop-filter: blur(18px);
+    }
+
+    .navbar a {
+        color: #0f172a !important;
+        margin: 0 16px;
+        padding: 10px 20px;
+        border-radius: 9999px;
+        transition: all 0.25s ease;
+        font-weight: 600;
+        background: rgba(255, 255, 255, 0.5);
+        border: 1px solid rgba(148, 163, 184, 0.22);
+    }
+
+    .navbar a:hover {
+        color: #1d4ed8 !important;
+        background: rgba(37, 99, 235, 0.12);
+        transform: translateY(-1px);
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(rgba(255,255,255,0.28), rgba(255,255,255,0.28)),
+            url("{{ url_for('static', filename='images/img.webp') }}") center/cover no-repeat;
+        background-attachment: fixed;
+        color: #0f172a;
+    }
+
+    .manager-page {
+        position: relative;
+        min-height: 100vh;
+        padding: 30px 18px 60px;
+        overflow: hidden;
+        background: transparent;
+    }
+
+    .manager-page::before,
+    .manager-page::after {
+        display: none;
+    }
+
+    .manager-panel {
+        max-width: 1200px;
+        margin: 60px auto 0;
+        padding: 30px;
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.48);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 22px 50px rgba(15, 23, 42, 0.10);
+        backdrop-filter: blur(22px);
+    }
+
+    .manager-heading {
+        text-align: center;
+        margin-bottom: 32px;
+        color: #0f172a;
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+    }
+
+    .top-employee {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 34px;
+        padding: 26px 28px;
+        background: rgba(255, 255, 255, 0.45);
+        border: 1px solid rgba(255, 255, 255, 0.45);
+        border-radius: 22px;
+        backdrop-filter: blur(16px);
+    }
+
+    .top-employee h3 {
+        margin-bottom: 10px;
+        font-size: 20px;
+        color: #0f172a;
+    }
+
+    .top-employee p {
+        margin: 0;
+        color: #334155;
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    .search-form {
+        width: 100%;
+        max-width: 780px;
+        margin: 0 auto 36px auto;
+        display: flex;
+        gap: 14px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .search-form input {
+        flex: 1;
+        min-width: 220px;
+        padding: 15px 18px;
+        border-radius: 16px;
+        border: 1px solid rgba(148, 163, 184, 0.32);
+        background: rgba(255, 255, 255, 0.88);
+        color: #0f172a;
+        font-size: 15px;
+        line-height: 1.5;
+    }
+
+    .search-form button {
+        padding: 15px 28px;
+        border-radius: 16px;
+        border: none;
+        background: #2563eb;
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .search-form button:hover {
+        background: #1d4ed8;
+        transform: translateY(-1px);
+    }
+
+    .manager-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: rgba(255, 255, 255, 0.80);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+        backdrop-filter: blur(12px);
+    }
+
+    .manager-table th,
+    .manager-table td {
+        padding: 18px 16px;
+        text-align: left;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+    }
+
+    .manager-table th {
+        background: rgba(241, 245, 249, 0.95);
+        color: #0f172a;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .manager-table tr:hover {
+        background: rgba(238, 242, 255, 0.75);
+    }
+
+    .approved {
+        color: #16a34a;
+        font-weight: 700;
+    }
+
+    .rejected {
+        color: #475569;
+        font-weight: 700;
+    }
+
+    .pending {
+        color: #2563eb;
+        font-weight: 700;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 16px;
+        border-radius: 9999px;
+        color: white;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .approve-btn {
+        background: #2563eb;
+    }
+
+    .reject-btn {
+        background: #475569;
+    }
+
+    .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 12px 26px rgba(37, 99, 235, 0.18);
+    }
+
+    @media (max-width: 900px) {
+        .manager-panel {
+            padding: 24px;
+        }
+
+        .manager-heading {
+            font-size: 28px;
+        }
+
+        .search-form {
+            gap: 10px;
+        }
+
+        .manager-table th,
+        .manager-table td {
+            padding: 14px 12px;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .top-employee {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .search-form {
+            flex-direction: column;
+        }
+
+        .search-form button {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="manager-page">
+    <div class="manager-panel">
+        <h2 class="manager-heading">Manager Dashboard</h2>
+
+        <div class="top-employee">
+            <div>
+                <h3>Top Employee (Most Leaves)</h3>
+                <p><strong>{{ top_employee }}</strong> ({{ top_count }} leaves)</p>
+            </div>
+        </div>
+
+        <form method="GET" action="/manager" class="search-form">
+            <input type="text" name="search" placeholder="Search employee name">
+            <button type="submit">Search</button>
+        </form>
+
+        <table class="manager-table">
+            <tr>
+                <th>ID</th>
+                <th>Employee</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Status</th>
+                <th>Probability</th>
+                <th>Action</th>
+            </tr>
+
+            {% for leave in leaves %}
+            <tr>
+                <td>{{ leave._id }}</td>
+                <td>{{ leave.employee_name }}</td>
+                <td>{{ leave.start_date }}</td>
+                <td>{{ leave.end_date }}</td>
+                <td class="{% if leave.status == 'Approved' %}approved{% elif leave.status == 'Rejected' %}rejected{% else %}pending{% endif %}">
+                    {{ leave.status }}
+                </td>
+                <td>{{ leave.probability }}</td>
+                <td>
+                    <a class="btn approve-btn" href="/update_status/{{ leave._id }}/Approved">Approve</a>
+                    <a class="btn reject-btn" href="/update_status/{{ leave._id }}/Rejected">Reject</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}

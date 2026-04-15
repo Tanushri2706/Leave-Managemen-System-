@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for Leave</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <style>
+        *{
+            box-sizing:border-box;
+            font-family:'Poppins', sans-serif;
+        }
+
+        body{
+            margin:0;
+            min-height:100vh;
+            padding:20px;
+            background-image: url("{{ url_for('static', filename='images/pexels-jplenio-1103970 (1).jpg') }}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            display:flex;
+            justify-content:center;
+            align-items:flex-start;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.9);
+            padding: 15px 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .navbar a {
+            margin: 0 20px;
+            text-decoration: none;
+            font-weight: bold;
+            color: white;
+            transition: 0.3s;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+
+        .navbar a:hover {
+            color: #fff;
+            background: rgba(78,115,223,0.8);
+        }
+
+        .leave-container{
+            background:rgba(255,255,255,0.1);
+            padding:30px;
+            border-radius:20px;
+            width:100%;
+            max-width:480px;
+            margin-top:80px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .icon{
+            font-size:40px;
+            margin-bottom:15px;
+            text-align:center;
+        }
+
+        h2{
+            margin-bottom:25px;
+            font-size:24px;
+            text-align:center;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .leave-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        label{
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 3px;
+            font-size: 14px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        input, select, textarea{
+            width:100%;
+            padding:10px;
+            border:1px solid rgba(255,255,255,0.3);
+            border-radius:8px;
+            outline:none;
+            font-size:14px;
+            background: rgba(255,255,255,0.9);
+            color: #2c3e50;
+            transition: all 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus{
+            border-color: #4e73df;
+            box-shadow: 0 0 8px rgba(78,115,223,0.4);
+            background: rgba(255,255,255,1);
+        }
+
+        .date-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .date-group input {
+            flex: 1;
+        }
+
+        .checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+        }
+
+        .checkbox input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+            transform: scale(1.1);
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border:none;
+            border-radius:8px;
+            color:white;
+            font-size:16px;
+            font-weight: 600;
+            cursor:pointer;
+            transition: all 0.3s;
+            margin-top:8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        button:hover{
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #5a6fd8, #6a4198);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .leave-container {
+                margin: 100px 15px 20px 15px;
+                padding: 25px 20px;
+            }
+
+            .date-group {
+                flex-direction: column;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            .navbar a {
+                margin: 0 10px;
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/manager">Manager</a>
+        <a href="/employees">Employees</a>
+        <a href="/logout">Logout</a>
+    </div>
+
+    <div class="leave-container">
+        <div class="icon">📅</div>
+        <h2>Apply for Leave</h2>
+
+        <form method="POST" action="/apply_leave" class="leave-form">
+
+            <div class="form-group">
+                <label>Start Date:</label>
+                <input type="date" name="start_date" required>
+            </div>
+
+            <div class="form-group">
+                <label>End Date:</label>
+                <input type="date" name="end_date" required>
+            </div>
+
+            <div class="form-group">
+                <label>Leave Type:</label>
+                <select name="leave_type">
+                    <option>Sick Leave</option>
+                    <option>Casual Leave</option>
+                    <option>Emergency Leave</option>
+                    <option>Maternity Leave</option>
+                    <option>Annual Leave</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Priority:</label>
+                <select name="priority">
+                    <option>Low</option>
+                    <option>Medium</option>
+                    <option>High</option>
+                    <option>Urgent</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Reason:</label>
+                <textarea name="reason" rows="4" placeholder="Please provide detailed reason for leave..."></textarea>
+            </div>
+
+            <label class="checkbox">
+                <input type="checkbox" name="half_day"> Half Day Leave
+            </label>
+
+            <button type="submit">Submit Leave Application</button>
+
+        </form>
+    </div>
+
+</body>
+</html>

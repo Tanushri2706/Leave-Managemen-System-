@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <style>
+        *{
+            box-sizing:border-box;
+            font-family:'Poppins', sans-serif;
+        }
+
+        body{
+            margin:0;
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+
+            background:linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+            url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f");
+            background-size:cover;
+            background-position:center;
+        }
+
+        .login-box{
+            background:rgba(255,255,255,0.15);
+            padding:40px;
+            border-radius:20px;
+            width:380px;
+            text-align:center;
+            color:white;
+            backdrop-filter: blur(12px);
+        }
+
+        .icon{
+            font-size:50px;
+            margin-bottom:10px;
+        }
+
+        h2{
+            margin-bottom:15px;
+            font-size:22px;
+            color: #23aafe;
+        }
+
+        input{
+            width:100%;
+            padding:12px;
+            margin:12px 0;
+            border:none;
+            border-radius:10px;
+            outline:none;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            background:#00c6ff;
+            border:none;
+            border-radius:10px;
+            color:white;
+            font-size:16px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#0072ff;
+        }
+
+        a {
+            color: #0072ff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #0056cc;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <div class="icon">🔐</div>
+    <h2>Login/Register</h2>
+
+    <form method="POST" action="/login">
+        <input type="text" name="username" placeholder="Enter Username" required>
+        <input type="password" name="password" placeholder="Enter Password" required>
+
+        <button type="submit">Login</button>
+    </form>
+    <p>Don't have account? <a href="/register">Register</a></p>
+
+</div>
+
+</body>
+</html>

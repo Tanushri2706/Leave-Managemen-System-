@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home page</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-image: url("{{ url_for('static', filename='images/pexels-jplenio-1103970 (1).jpg') }}");
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+        .header {
+            text-align: center;
+            padding: 15px 0;
+            position: relative;
+        }
+
+        .header h2 {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .login a {
+            text-decoration: none;
+            color: white;
+            background-color: rgba(1, 68, 193, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 24px;
+            border-radius: 6px;
+            transition: 0.3s;  
+            font-size: 18px;
+            font-weight: 600;
+            display: inline-block;
+            margin: 0 8px;
+            backdrop-filter: blur(8px);
+        }
+
+        .login a:hover {
+            background-color: rgba(1, 68, 193, 0.95);
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .login {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+        }
+
+        .auth-btn {
+            position: relative;
+            display: inline-block;
+        }
+
+        .auth-btn > a {
+            text-decoration: none;
+            color: white;
+            background-color: rgb(1, 68, 193);
+            padding: 10px 28px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .auth-btn > a:hover {
+            background-color: rgb(132, 174, 252);
+            color: rgb(1, 68, 193);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            z-index: 100;
+            min-width: 160px;
+            margin-top: 8px;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 12px 20px;
+            color: rgb(1, 68, 193);
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s ease;
+        }
+
+        .dropdown-menu a:first-child {
+            border-radius: 8px 8px 0 0;
+        }
+
+        .dropdown-menu a:last-child {
+            border-radius: 0 0 8px 8px;
+        }
+
+        .dropdown-menu a:hover {
+            background: rgba(1, 68, 193, 0.1);
+        }
+
+        .auth-btn:hover .dropdown-menu {
+            display: block;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-top: 10px;
+            text-decoration: none;
+            font-size: 36px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .con {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            padding: 30px;
+        }
+        .child {
+            height: 250px;
+            width: 270px;
+            border: 1px outset rgb(117, 150, 160);
+            box-shadow: 2px 2px 5px 5px rgb(117, 150, 160);
+            border-radius: 0 0 30px 30px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .child:hover {
+            background-color: #d3f4f9;
+        }
+
+        .pp {
+            height: 250px;
+            width: 240px;
+            margin: auto;
+            position: relative;
+            transition: 1.2s ease;
+        }
+
+        .child:hover .pp {
+            transform: translateY(-60px);
+        }
+
+        .pp img {
+            height: 205px;
+            width: 240px;
+            object-fit: cover;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0px 0px 2px 2px rgb(216, 238, 252);
+        }
+
+        .name {
+            text-align: center;
+            color: rgb(89, 93, 131);
+            font-size: 27px;
+            margin-top: -80px;
+            font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        }
+
+        .info {
+           text-align: center;
+            color: rgb(89, 93, 131);
+            font-weight: bold;
+            position: relative;
+            bottom: 0;
+            z-index: 0; 
+        }
+
+        .date {
+            font-size: 16px;
+        }
+
+        .post {
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Welcome + Login -->
+    <div class="header">
+        <h1> Smart Leave Management System</h1>
+        <h2 style="color: rgba(255,255,255,0.9); font-size: 18px; font-weight: 400; margin-bottom: 20px;">Intelligent leave approval powered by AI</h2>
+        <div class="login">
+            <a href="/login">Login</a>
+            <a href="/register" class="register-btn">Register</a>
+        </div>
+    </div>
+
+    <div class="con">
+
+        <div class="child">
+            <div class="pp">
+                <img src="{{ url_for('static', filename='images/pic1.jpeg') }}">
+            </div>
+            <p class="name">Prerna Mittal</p>
+            <div class="info">
+                <p class="date">Join:- 15/02/2021</p>
+                <p class="post">post:- Junior Java Developer</p>
+            </div>
+        </div>
+
+        <div class="child">
+            <div class="pp">
+                <img src="{{ url_for('static', filename='images/pic2.avif') }}">
+            </div>
+            <p class="name">Arpita Birla</p>
+            <div class="info">
+                <p class="date">Join:- 02/05/2021</p>
+                <p class="post">post:- Junior Dotnet Developer</p>
+            </div>
+        </div>
+
+        <div class="child">
+            <div class="pp">
+                <img src="{{ url_for('static', filename='images/pic3.jpeg') }}">
+            </div>
+            <p class="name">Annu kr. pal</p>
+            <div class="info">
+                <p class="date">Join:- 25/07/2022</p>
+                <p class="post">post:- Programming Analyst</p>
+            </div>
+        </div>
+
+        <div class="child">
+            <div class="pp">
+                <img src="{{ url_for('static', filename='images/pic44.jpg') }}">
+            </div>
+            <p class="name">Shalini Singh</p>
+            <div class="info">
+                <p class="date">Join:- 17/04/2023</p>
+                <p class="post">post:- Software Specialist</p>
+            </div>
+        </div>
+
+        <div class="child">
+            <div class="pp">
+                <img src="{{ url_for('static', filename='images/pic5.jpeg') }}">
+            </div>
+            <p class="name">Anshika Sharma</p>
+            <div class="info">
+                <p class="date">Join:- 09/11/2023</p>
+                <p class="post">post:- C Developer</p>
+            </div>
+        </div>
+
+        <div class="child">
+            <div class="pp">
+                <img src="{{ url_for('static', filename='images/pic6.jpg') }}">
+            </div>
+            <p class="name">Rishita verma</p>
+            <div class="info">
+                <p class="date">Join:- 13/02/2024</p>
+                <p class="post">post:- Full Stack Engineer</p>
+            </div>
+        </div>
+
+        <div class="child">
+            <div class="pp">
+                <img src="{{ url_for('static', filename='images/pic7.avif') }}">
+            </div>
+            <p class="name">Shreya Dalal</p>
+            <div class="info">
+                <p class="date">Join:- 20/07/2024</p>
+                <p class="post">post:- Game Developer</p>
+            </div>
+        </div>
+
+        <div class="child">
+            <div class="pp">
+                <img src="{{ url_for('static', filename='images/pic8.avif') }}">
+            </div>
+            <p class="name">Anjali Dahiya</p>
+            <div class="info">
+                <p class="date">Join:- 01/03/2025</p>
+                <p class="post">post:- Unity Developer</p>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

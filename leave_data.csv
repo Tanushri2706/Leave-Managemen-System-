@@ -1,0 +1,16 @@
+number_of_leaves,leave_type,duration,priority,half_day,past_pattern,status
+9,Casual,2,Low,0,1,Pending
+9,Casual,2,Low,0,1,Approved
+2,Casual,2,Low,0,0,Pending
+2,Casual,2,Low,0,0,Approved
+2,Casual,2,Low,0,0,Pending
+2,Casual,2,Low,0,0,Approved
+2,Casual,2,Low,0,0,Pending
+2,Casual,2,Low,0,0,Approved
+9,Casual,2,Low,0,1,Pending
+9,Casual,3,Low,0,1,Pending
+9,Casual,15,Low,0,1,Pending
+9,Sick,15,Medium,0,1,Rejected
+9,Emergency,2,High,0,1,Rejected
+9,Emergency,-2,High,0,1,Pending
+9,Casual,1,Low,0,1,Rejected
