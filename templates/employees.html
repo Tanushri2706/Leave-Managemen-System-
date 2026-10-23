@@ -1,112 +1,75 @@
 {% extends "base.html" %}
 
-{% block title %}Employees{% endblock %}
+{% block title %}Workforce Directory - WorkSphere AI{% endblock %}
 
 {% block content %}
-<style>
-    .employee-page {
-        margin: 100px auto 40px;
-        max-width: 1100px;
-        padding: 32px;
-        border-radius: 28px;
-        background: rgba(255, 255, 255, 0.78);
-        border: 1px solid rgba(148, 163, 184, 0.32);
-        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
-        backdrop-filter: blur(16px);
-    }
+<div class="main-container">
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 30px;">
+        <div>
+            <span class="section-tag"><i class="fa-solid fa-users"></i> Organizational Directory</span>
+            <h2 style="font-size: 28px; font-weight: 800; color: var(--slate-900); margin-top: 4px;">Indian Workforce & Talent Directory</h2>
+            <p style="color: var(--slate-500); font-size: 14px;">Active personnel profiles, assigned departments, and leave balance quotas</p>
+        </div>
 
-    .employee-heading {
-        text-align: center;
-        margin-bottom: 28px;
-        color: #0f172a;
-        font-size: 32px;
-        font-weight: 700;
-    }
+        <div style="background: white; border: 1px solid var(--slate-200); padding: 8px 18px; border-radius: var(--radius-full); font-size: 13px; font-weight: 700; color: var(--slate-700);">
+            <i class="fa-solid fa-circle-check" style="color: var(--success);"></i> Total Headcount: {{ employees|length }}
+        </div>
+    </div>
 
-    .employee-table {
-        width: 100%;
-        border-collapse: collapse;
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
-        backdrop-filter: blur(12px);
-    }
-
-    .employee-table th,
-    .employee-table td {
-        padding: 18px 16px;
-        text-align: left;
-        border-bottom: 1px solid rgba(148, 163, 184, 0.18);
-    }
-
-    .employee-table th {
-        background: rgba(241, 245, 249, 0.95);
-        color: #0f172a;
-        font-size: 15px;
-        font-weight: 700;
-    }
-
-    .employee-table tr:hover {
-        background: rgba(238, 242, 255, 0.75);
-    }
-
-    .employee-table td {
-        color: #334155;
-        font-size: 15px;
-    }
-
-    .employee-table a {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 10px 16px;
-        border-radius: 9999px;
-        background: rgba(37, 99, 235, 0.12);
-        color: #1d4ed8;
-        text-decoration: none;
-        font-weight: 600;
-        transition: background 0.2s ease, transform 0.2s ease;
-    }
-
-    .employee-table a:hover {
-        background: rgba(37, 99, 235, 0.2);
-        transform: translateY(-1px);
-    }
-
-    @media (max-width: 900px) {
-        .employee-page {
-            margin: 90px 16px 30px;
-            padding: 28px;
-        }
-
-        .employee-table th,
-        .employee-table td {
-            padding: 14px 12px;
-        }
-    }
-</style>
-
-<div class="employee-page">
-    <h2 class="employee-heading">Employees</h2>
-
-    <table class="employee-table">
-        <tr>
-            <th>Name</th>
-            <th>Position</th>
-            <th>Contact</th>
-            <th>Details</th>
-        </tr>
-
+    <!-- Employee Cards Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 24px;">
         {% for emp in employees %}
-        <tr>
-            <td>{{ emp.name }}</td>
-            <td>{{ emp.position }}</td>
-            <td>{{ emp.contact }}</td>
-            <td><a href="/employee/{{ emp._id }}">More Details</a></td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
+        <div class="emp-card">
+            <div class="emp-card-banner" style="height: 75px;">
+                <span class="emp-card-code">{{ emp.emp_code if emp.emp_code else 'NEX-' + loop.index|string }}</span>
+            </div>
+            
+            <div class="emp-card-body">
+                <div class="emp-avatar-wrapper" style="margin-top: -45px;">
+                    <img src="{{ url_for('static', filename='images/' + emp.avatar) }}" 
+                         alt="{{ emp.name }}" 
+                         class="emp-avatar-img"
+                         style="width: 80px; height: 80px;"
+                         onerror="this.src='{{ url_for('static', filename='images/aarav.jpg') }}'">
+                    <span class="emp-status-dot" title="Active"></span>
+                </div>
 
+                <h3 class="emp-card-name" style="font-size: 19px;">{{ emp.name }}</h3>
+                <p class="emp-card-position">{{ emp.position }}</p>
+                <div class="emp-card-dept">
+                    <i class="fa-solid fa-building"></i> {{ emp.department if emp.department else 'Engineering' }}
+                </div>
+
+                <!-- Leave Quota Indicator Mini Bar -->
+                <div style="background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 16px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; color: var(--slate-600); margin-bottom: 6px;">
+                        <span>Leave Balance:</span>
+                        <strong style="color: var(--success-dark);">{{ emp.remaining_quota }} / {{ emp.total_quota if emp.total_quota else 30 }} Days</strong>
+                    </div>
+                    <div style="width: 100%; height: 6px; background: var(--slate-200); border-radius: var(--radius-full); overflow: hidden;">
+                        {% set pct = (emp.remaining_quota / (emp.total_quota if emp.total_quota else 30) * 100)|round|int %}
+                        <div style="width: {{ pct }}%; height: 100%; background: var(--primary); border-radius: var(--radius-full);"></div>
+                    </div>
+                </div>
+
+                <div class="emp-meta-list">
+                    <div class="emp-meta-item">
+                        <span class="emp-meta-label"><i class="fa-solid fa-location-dot"></i> Hub</span>
+                        <span class="emp-meta-value">{{ emp.location if emp.location else 'India' }}</span>
+                    </div>
+                    <div class="emp-meta-item">
+                        <span class="emp-meta-label"><i class="fa-solid fa-phone"></i> Contact</span>
+                        <span class="emp-meta-value">{{ emp.contact }}</span>
+                    </div>
+                    <div class="emp-meta-item" style="margin-top: 6px;">
+                        <a href="/employee/{{ emp._id }}" class="btn-action-view" style="width: 100%; justify-content: center; padding: 8px;">
+                            <i class="fa-solid fa-id-card"></i> View Full Profile & Leaves
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

@@ -1,103 +1,74 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
+{% extends "base.html" %}
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+{% block title %}WorkSphere AI - Enterprise Sign In{% endblock %}
 
-    <style>
-        *{
-            box-sizing:border-box;
-            font-family:'Poppins', sans-serif;
-        }
+{% block content %}
+<div class="auth-page-wrapper">
+    <div class="auth-glass-box">
+        <div class="auth-header">
+            <div class="auth-icon-circle">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h2 class="auth-title">Sign In to WorkSphere</h2>
+            <p class="auth-subtitle">Access your enterprise dashboard & leave portal</p>
+        </div>
 
-        body{
-            margin:0;
-            height:100vh;
-            display:flex;
-            justify-content:center;
-            align-items:center;
+        {% if error %}
+        <div style="background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; padding: 12px; border-radius: 8px; margin-bottom: 18px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-triangle-exclamation"></i> {{ error }}
+        </div>
+        {% endif %}
 
-            background:linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-            url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f");
-            background-size:cover;
-            background-position:center;
-        }
+        <!-- Quick Demo Credentials Helper -->
+        <div class="demo-credentials-pill">
+            <div class="demo-title">
+                <i class="fa-solid fa-key"></i> Quick Demo Autofill (Click to Test):
+            </div>
+            <div class="demo-chips">
+                <button type="button" class="demo-btn-chip" onclick="autofill('admin', 'admin123')">
+                    👔 Manager (admin)
+                </button>
+                <button type="button" class="demo-btn-chip" onclick="autofill('aarav.sharma', '123')">
+                    💻 Lead Dev (Aarav)
+                </button>
+                <button type="button" class="demo-btn-chip" onclick="autofill('priya.patel', '123')">
+                    🎨 UI Designer (Priya)
+                </button>
+            </div>
+        </div>
 
-        .login-box{
-            background:rgba(255,255,255,0.15);
-            padding:40px;
-            border-radius:20px;
-            width:380px;
-            text-align:center;
-            color:white;
-            backdrop-filter: blur(12px);
-        }
+        <form method="POST" action="/login">
+            <div class="form-group">
+                <label class="form-label" for="username">
+                    <i class="fa-solid fa-user"></i> Username / Corporate ID
+                </label>
+                <input type="text" id="username" name="username" class="form-input" placeholder="e.g. admin or aarav.sharma" required>
+            </div>
 
-        .icon{
-            font-size:50px;
-            margin-bottom:10px;
-        }
+            <div class="form-group">
+                <label class="form-label" for="password">
+                    <i class="fa-solid fa-lock"></i> Password
+                </label>
+                <input type="password" id="password" name="password" class="form-input" placeholder="Enter password" required>
+            </div>
 
-        h2{
-            margin-bottom:15px;
-            font-size:22px;
-            color: #23aafe;
-        }
+            <button type="submit" class="btn-submit-primary" style="margin-top: 10px;">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In to Account
+            </button>
+        </form>
 
-        input{
-            width:100%;
-            padding:12px;
-            margin:12px 0;
-            border:none;
-            border-radius:10px;
-            outline:none;
-        }
-
-        button{
-            width:100%;
-            padding:12px;
-            background:#00c6ff;
-            border:none;
-            border-radius:10px;
-            color:white;
-            font-size:16px;
-            cursor:pointer;
-        }
-
-        button:hover{
-            background:#0072ff;
-        }
-
-        a {
-            color: #0072ff;
-            text-decoration: none;
-        }
-
-        a:hover {
-            color: #0056cc;
-        }
-    </style>
-
-</head>
-
-<body>
-
-<div class="login-box">
-
-    <div class="icon">🔐</div>
-    <h2>Login/Register</h2>
-
-    <form method="POST" action="/login">
-        <input type="text" name="username" placeholder="Enter Username" required>
-        <input type="password" name="password" placeholder="Enter Password" required>
-
-        <button type="submit">Login</button>
-    </form>
-    <p>Don't have account? <a href="/register">Register</a></p>
-
+        <div class="auth-footer">
+            Don't have an enterprise account? <a href="/register">Register new employee</a>
+        </div>
+    </div>
 </div>
+{% endblock %}
 
-</body>
-</html>
+{% block scripts %}
+<script>
+    function autofill(u, p) {
+        document.getElementById('username').value = u;
+        document.getElementById('password').value = p;
+    }
+</script>
+{% endblock %}

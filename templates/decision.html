@@ -1,26 +1,146 @@
 {% extends "base.html" %}
 
-{% block title %}AI Decision{% endblock %}
+{% block title %}AI Decision Breakdown - WorkSphere AI{% endblock %}
 
 {% block content %}
+<div class="main-container" style="max-width: 840px;">
+    <!-- Breadcrumb & Nav -->
+    <div style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
+        <a href="javascript:history.back()" style="display: inline-flex; align-items: center; gap: 8px; color: var(--slate-600); text-decoration: none; font-size: 14px; font-weight: 700;">
+            <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+        </a>
+        <span style="font-size: 13px; font-weight: 600; color: var(--slate-400);">
+            Decision Reference ID: #{{ leave._id }}
+        </span>
+    </div>
 
-<h2>Smart AI Decision</h2>
+    <!-- Main AI Decision Card -->
+    <div style="background: white; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--glass-shadow);">
+        <!-- Card Header Banner -->
+        <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 32px 36px; color: white; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+            <div>
+                <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 4px 12px; border-radius: var(--radius-full); font-size: 12px; font-weight: 700; color: #93c5fd; margin-bottom: 12px;">
+                    <i class="fa-solid fa-brain"></i> Machine Learning Decision Engine
+                </div>
+                <h2 style="font-size: 26px; font-weight: 800; letter-spacing: -0.02em;">Automated Risk & Policy Audit</h2>
+                <p style="color: var(--slate-300); font-size: 14px; margin-top: 4px;">Evaluating request against attendance history and organizational policies</p>
+            </div>
 
-<div class="card">
+            <!-- Probability Score Circle / Gauge -->
+            <div style="text-align: center; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 16px 24px; border-radius: var(--radius-lg); backdrop-filter: blur(10px);">
+                <span style="font-size: 12px; font-weight: 700; color: var(--slate-400); text-transform: uppercase; letter-spacing: 0.05em; display: block;">Confidence Score</span>
+                <span style="font-size: 38px; font-weight: 800; color: #38bdf8; line-height: 1.1;">{{ prob_pct }}%</span>
+                <span style="display: block; font-size: 11px; font-weight: 600; color: {% if prob_pct >= 85 %}#4ade80{% elif prob_pct >= 70 %}#facc15{% else %}#f87171{% endif %}; margin-top: 2px;">
+                    {% if prob_pct >= 85 %}High Reliability{% elif prob_pct >= 70 %}Standard Confidence{% else %}Moderate Risk{% endif %}
+                </span>
+            </div>
+        </div>
 
-<p><strong>Employee:</strong> {{ employee }}</p>
-<p><strong>Leave Dates:</strong> {{ leave.start_date }} to {{ leave.end_date }}</p>
-<p><strong>Status:</strong> {{ leave.status }}</p>
-<p><strong>Probability:</strong> {{ leave.probability }}</p>
+        <div style="padding: 36px;">
+            <!-- Applicant Overview Strip -->
+            <div style="display: flex; align-items: center; justify-content: space-between; background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-lg); padding: 18px 24px; margin-bottom: 30px; flex-wrap: wrap; gap: 16px;">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <img src="{{ url_for('static', filename='images/' + (employee.avatar if employee else 'aarav.jpg')) }}" 
+                         alt="Avatar" 
+                         style="width: 54px; height: 54px; border-radius: var(--radius-md); object-fit: cover; border: 2px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"
+                         onerror="this.src='{{ url_for('static', filename='images/aarav.jpg') }}'">
+                    <div>
+                        <strong style="font-size: 17px; color: var(--slate-900); display: block;">{{ employee.name if employee else 'Staff Member' }}</strong>
+                        <span style="font-size: 13px; color: var(--slate-500);">{{ employee.position if employee else 'Employee' }} &bull; {{ employee.department if employee else 'Tech' }}</span>
+                    </div>
+                </div>
 
-<h3>AI Reason:</h3>
+                <div style="text-align: right;">
+                    <span style="font-size: 12px; color: var(--slate-500); display: block;">System Recommendation:</span>
+                    {% if leave.status == 'Approved' %}
+                        <span class="badge-status badge-approved" style="font-size: 14px; padding: 6px 16px; margin-top: 4px;">
+                            <i class="fa-solid fa-circle-check"></i> Approved & Authorized
+                        </span>
+                    {% elif leave.status == 'Rejected' %}
+                        <span class="badge-status badge-rejected" style="font-size: 14px; padding: 6px 16px; margin-top: 4px;">
+                            <i class="fa-solid fa-circle-xmark"></i> Policy Rejection Flagged
+                        </span>
+                    {% else %}
+                        <span class="badge-status badge-pending" style="font-size: 14px; padding: 6px 16px; margin-top: 4px;">
+                            <i class="fa-solid fa-clock"></i> Pending Manager Review
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
 
-<ul>
-{% for r in reasons %}
-<li>{{ r }}</li>
-{% endfor %}
-</ul>
+            <!-- Leave Parameters Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 32px;">
+                <div style="border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 14px 16px;">
+                    <span style="font-size: 11px; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">Leave Type</span>
+                    <strong style="display: block; font-size: 15px; color: var(--slate-800); margin-top: 2px;">{{ leave.leave_type if leave.leave_type else 'Casual Leave' }}</strong>
+                </div>
 
+                <div style="border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 14px 16px;">
+                    <span style="font-size: 11px; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">Duration</span>
+                    <strong style="display: block; font-size: 15px; color: var(--primary); margin-top: 2px;">{{ leave.duration }} {% if leave.duration == 1 %}Day{% else %}Days{% endif %}</strong>
+                </div>
+
+                <div style="border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 14px 16px;">
+                    <span style="font-size: 11px; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">Schedule</span>
+                    <strong style="display: block; font-size: 14px; color: var(--slate-800); margin-top: 2px;">{{ leave.start_date }} &rarr; {{ leave.end_date }}</strong>
+                </div>
+
+                <div style="border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 14px 16px;">
+                    <span style="font-size: 11px; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">Priority Class</span>
+                    <strong style="display: block; font-size: 15px; color: {% if leave.priority in ['Urgent', 'Critical'] %}var(--danger){% else %}var(--slate-800){% endif %}; margin-top: 2px;">
+                        {{ leave.priority if leave.priority else 'Normal' }}
+                    </strong>
+                </div>
+            </div>
+
+            <!-- Reason Provided by Employee -->
+            <div style="margin-bottom: 32px;">
+                <h4 style="font-size: 14px; font-weight: 700; color: var(--slate-700); margin-bottom: 8px;">
+                    <i class="fa-solid fa-comment-dots" style="color: var(--primary);"></i> Stated Justification & Notes:
+                </h4>
+                <div style="background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 14px 18px; font-size: 14px; color: var(--slate-700); line-height: 1.6;">
+                    "{{ leave.reason if leave.reason else 'Routine leave request.' }}"
+                </div>
+            </div>
+
+            <!-- AI Engine Explanations & Audit Trail -->
+            <div style="margin-bottom: 34px;">
+                <h4 style="font-size: 15px; font-weight: 800; color: var(--slate-900); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-list-check" style="color: var(--primary);"></i> AI Rule & Velocity Breakdown:
+                </h4>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    {% for r in reasons %}
+                    <div style="display: flex; align-items: flex-start; gap: 12px; background: white; border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 14px 18px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+                        <div style="width: 24px; height: 24px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 12px; margin-top: 1px; flex-shrink: 0;">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <span style="font-size: 14px; color: var(--slate-800); line-height: 1.5;">{{ r }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Manager Action Override Controls -->
+            {% if session.get('role') == 'manager' %}
+            <div style="border-top: 1px solid var(--slate-200); padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+                <span style="font-size: 13px; font-weight: 700; color: var(--slate-600);">
+                    <i class="fa-solid fa-gavel"></i> Managerial Override Decision:
+                </span>
+                <div style="display: flex; gap: 10px;">
+                    {% if leave.status != 'Approved' %}
+                    <a href="/update_status/{{ leave._id }}/Approved" class="btn-action-approve" style="padding: 10px 22px; font-size: 13px;">
+                        <i class="fa-solid fa-check"></i> Approve Application
+                    </a>
+                    {% endif %}
+                    {% if leave.status != 'Rejected' %}
+                    <a href="/update_status/{{ leave._id }}/Rejected" class="btn-action-reject" style="padding: 10px 22px; font-size: 13px;">
+                        <i class="fa-solid fa-xmark"></i> Reject Application
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
 </div>
-
 {% endblock %}

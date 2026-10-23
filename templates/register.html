@@ -1,135 +1,88 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Register</title>
+{% extends "base.html" %}
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+{% block title %}WorkSphere AI - Employee Registration{% endblock %}
 
-    <style>
-        *{
-            box-sizing:border-box;
-            font-family:'Poppins', sans-serif;
-        }
+{% block content %}
+<div class="auth-page-wrapper">
+    <div class="auth-glass-box" style="max-width: 580px;">
+        <div class="auth-header">
+            <div class="auth-icon-circle">
+                <i class="fa-solid fa-user-plus"></i>
+            </div>
+            <h2 class="auth-title">Register Employee</h2>
+            <p class="auth-subtitle">Create a corporate profile in the WorkSphere system</p>
+        </div>
 
-        body{
-            margin:0;
-            height:100vh;
-            display:flex;
-            justify-content:center;
-            align-items:center;
+        {% if error %}
+        <div style="background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; padding: 12px; border-radius: 8px; margin-bottom: 18px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-triangle-exclamation"></i> {{ error }}
+        </div>
+        {% endif %}
 
-            background:linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-            url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f");
-            background-size:cover;
-            background-position:center;
-        }
+        <form method="POST" action="/register">
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label class="form-label" for="name"><i class="fa-solid fa-id-badge"></i> Full Name</label>
+                    <input type="text" id="name" name="name" class="form-input" placeholder="e.g. Rahul Sharma" required>
+                </div>
 
-        .register-box{
-            background:rgba(255,255,255,0.15);
-            padding:40px;
-            border-radius:20px;
-            width:400px;
-            text-align:center;
-            color:white;
-            backdrop-filter: blur(12px);
-        }
+                <div class="form-group">
+                    <label class="form-label" for="username"><i class="fa-solid fa-user"></i> Username</label>
+                    <input type="text" id="username" name="username" class="form-input" placeholder="e.g. rahul.sharma" required>
+                </div>
+            </div>
 
-        .icon{
-            font-size:50px;
-            margin-bottom:10px;
-        }
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label class="form-label" for="password"><i class="fa-solid fa-lock"></i> Password</label>
+                    <input type="password" id="password" name="password" class="form-input" placeholder="Create password" required>
+                </div>
 
-        h2{
-            margin-bottom:20px;
-            font-size:28px;
-            color: #0c8df6da;
-        }
+                <div class="form-group">
+                    <label class="form-label" for="contact"><i class="fa-solid fa-phone"></i> Contact Number</label>
+                    <input type="text" id="contact" name="contact" class="form-input" placeholder="+91 98XXX XXXXX" required>
+                </div>
+            </div>
 
-        input{
-            width:100%;
-            padding:12px;
-            margin:12px 0;
-            border:none;
-            border-radius:10px;
-            outline:none;
-        }
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label class="form-label" for="position"><i class="fa-solid fa-briefcase"></i> Designation / Post</label>
+                    <input type="text" id="position" name="position" class="form-input" placeholder="e.g. Senior Software Engineer" required>
+                </div>
 
-        button{
-            width:100%;
-            padding:12px;
-            background:#0c8df6da;
-            border:none;
-            border-radius:50px;
-            color:white;
-            font-size:16px;
-            cursor:pointer;
-            margin-top:10px;
-        }
+                <div class="form-group">
+                    <label class="form-label" for="department"><i class="fa-solid fa-sitemap"></i> Department</label>
+                    <select id="department" name="department" class="form-select">
+                        <option value="Engineering & Technology">Engineering & Technology</option>
+                        <option value="Product & Design">Product & Design</option>
+                        <option value="Cloud & Infrastructure">Cloud & Infrastructure</option>
+                        <option value="Data Science & AI Labs">Data Science & AI Labs</option>
+                        <option value="People & Culture (HR)">People & Culture (HR)</option>
+                        <option value="Quality Assurance">Quality Assurance</option>
+                    </select>
+                </div>
+            </div>
 
-        button:hover{
-            background:#0072ff;
-        }
+            <div class="form-group">
+                <label class="form-label" for="location"><i class="fa-solid fa-location-dot"></i> Base Office Location</label>
+                <select id="location" name="location" class="form-select">
+                    <option value="Bengaluru, India">Bengaluru Hub (Tech Park)</option>
+                    <option value="Mumbai, India">Mumbai (Corporate Towers)</option>
+                    <option value="Gurugram, India">Gurugram (Cyber City)</option>
+                    <option value="Pune, India">Pune (IT Hub)</option>
+                    <option value="Hyderabad, India">Hyderabad (HITEC City)</option>
+                    <option value="Chennai, India">Chennai (OMR Campus)</option>
+                </select>
+            </div>
 
-        a {
-            color: #0072ff;
-            text-decoration: none;
-        }
+            <button type="submit" class="btn-submit-primary" style="margin-top: 14px;">
+                <i class="fa-solid fa-check"></i> Complete Registration & Activate Profile
+            </button>
+        </form>
 
-        a:hover {
-            color: #0056cc;
-        }
-
-        .login-btn {
-            display: inline-block;
-            width: 100%;
-            padding: 12px;
-            background: rgba(59, 130, 246, 0.18);
-            border: 2px solid #0072ff;
-            border-radius: 10px;
-            color: #0072ff;
-            font-size: 16px;
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-            margin-top: 12px;
-            transition: all 0.3s ease;
-        }
-
-        .login-btn:hover {
-            background: #0072ff;
-            color: white;
-            transform: translateY(-2px);
-        }
-    </style>
-
-</head>
-
-<body>
-
-<div class="register-box">
-
-    <div class="icon">📝</div>
-    <h2>Register</h2>
-
-    <form method="POST">
-
-        <input type="text" name="username" placeholder="Enter Username" required>
-
-        <input type="password" name="password" placeholder="Enter Password" required>
-
-        <!-- ✅ FIXED -->
-        <input type="text" name="position" placeholder="Position (e.g. Developer)" required>
-
-        <input type="text" name="contact" placeholder="Contact Number" required>
-
-        <button type="submit">Register</button>
-
-    </form>
-
-    <p>Already have account? <a href="/login">Login</a></p>
-
+        <div class="auth-footer">
+            Already registered? <a href="/login">Sign in directly</a>
+        </div>
+    </div>
 </div>
-
-</body>
-</html>
+{% endblock %}

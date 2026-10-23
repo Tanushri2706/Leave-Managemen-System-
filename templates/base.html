@@ -1,25 +1,109 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>{% block title %}Leave System{% endblock %}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}WorkSphere AI - Smart Leave Management System{% endblock %}</title>
+
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block extra_head %}{% endblock %}
 </head>
 
 <body>
 
-<div class="navbar">
-    <a href="/">Home</a>
-    <a href="/dashboard">Dashboard</a>
-    <a href="/leave">Apply Leave</a>
-    <a href="/manager">Manager</a>
-    <a href="/employees">Employees</a> 
-    <a href="/logout">Logout</a>
-</div>
+    <!-- Executive Enterprise Navbar -->
+    <nav class="enterprise-navbar">
+        <div class="nav-container">
+            <a href="/" class="brand-logo">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-layer-group"></i>
+                </div>
+                <div class="logo-text">
+                    <span class="brand-name">WorkSphere<span class="brand-badge">AI</span></span>
+                    <span class="brand-sub">Enterprise Leave Portal</span>
+                </div>
+            </a>
 
-<div class="container">
-    {% block content %}{% endblock %}
-</div>
+            <div class="nav-links">
+                <a href="/" class="nav-item {% if request.path == '/' %}active{% endif %}">
+                    <i class="fa-solid fa-house"></i> Home
+                </a>
 
+                {% if session.get('username') %}
+                    {% if session.get('role') == 'manager' %}
+                        <a href="/manager" class="nav-item {% if request.path == '/manager' %}active{% endif %}">
+                            <i class="fa-solid fa-chart-pie"></i> Manager Portal
+                        </a>
+                    {% else %}
+                        <a href="/dashboard" class="nav-item {% if request.path == '/dashboard' %}active{% endif %}">
+                            <i class="fa-solid fa-gauge-high"></i> Dashboard
+                        </a>
+                        <a href="/leave" class="nav-item {% if request.path == '/leave' %}active{% endif %}">
+                            <i class="fa-solid fa-calendar-plus"></i> Apply Leave
+                        </a>
+                    {% endif %}
+                    <a href="/employees" class="nav-item {% if request.path == '/employees' %}active{% endif %}">
+                        <i class="fa-solid fa-users"></i> Directory
+                    </a>
+                {% endif %}
+            </div>
+
+            <div class="nav-actions">
+                {% if session.get('username') %}
+                    <div class="user-profile-badge">
+                        <img src="{{ url_for('static', filename='images/' + session.get('avatar', 'aarav.jpg')) }}" 
+                             alt="User" 
+                             class="user-avatar-mini"
+                             onerror="this.src='{{ url_for('static', filename='images/aarav.jpg') }}'">
+                        <div class="user-meta">
+                            <span class="user-name">{{ session.get('display_name', session.get('username')) }}</span>
+                            <span class="user-role-chip {% if session.get('role') == 'manager' %}role-manager{% else %}role-employee{% endif %}">
+                                {% if session.get('role') == 'manager' %}Manager{% else %}Employee{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                    <a href="/logout" class="btn-logout" title="Sign Out">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </a>
+                {% else %}
+                    <a href="/login" class="btn-nav-login">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i> Login
+                    </a>
+                    <a href="/register" class="btn-nav-register">
+                        <i class="fa-solid fa-user-plus"></i> Register
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Slot -->
+    <main class="page-wrapper">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Professional Footer -->
+    <footer class="enterprise-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>WorkSphere Smart Leave Management System &copy; 2026. Empowered with Random Forest Predictive AI.</span>
+            </div>
+            <div class="footer-tags">
+                <span class="security-tag"><i class="fa-solid fa-circle-check"></i> Enterprise Secured</span>
+                <span class="security-tag"><i class="fa-solid fa-bolt"></i> Real-time Evaluation</span>
+            </div>
+        </div>
+    </footer>
+
+    {% block scripts %}{% endblock %}
 </body>
 </html>

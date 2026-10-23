@@ -1,285 +1,233 @@
 {% extends "base.html" %}
 
-{% block title %}Manager Dashboard{% endblock %}
+{% block title %}Manager Operations Portal - WorkSphere AI{% endblock %}
 
 {% block content %}
-<style>
-    .navbar {
-        background: rgba(255, 255, 255, 0.64) !important;
-        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.10);
-        border-bottom: 1px solid rgba(148, 163, 184, 0.24);
-        backdrop-filter: blur(18px);
-    }
+<div class="main-container">
+    <!-- Header with Manager Identity -->
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 30px;">
+        <div>
+            <span class="section-tag"><i class="fa-solid fa-user-tie"></i> Administrative Command</span>
+            <h2 style="font-size: 28px; font-weight: 800; color: var(--slate-900); margin-top: 4px;">Managerial Review & Analytics</h2>
+            <p style="color: var(--slate-500); font-size: 14px;">Monitor team leave velocity, review pending applications, and audit AI predictions</p>
+        </div>
 
-    .navbar a {
-        color: #0f172a !important;
-        margin: 0 16px;
-        padding: 10px 20px;
-        border-radius: 9999px;
-        transition: all 0.25s ease;
-        font-weight: 600;
-        background: rgba(255, 255, 255, 0.5);
-        border: 1px solid rgba(148, 163, 184, 0.22);
-    }
+        <div style="display: flex; gap: 10px;">
+            <a href="/employees" class="btn-hero-secondary" style="padding: 10px 18px; font-size: 13px;">
+                <i class="fa-solid fa-users"></i> Employee Directory
+            </a>
+            <a href="/leave" class="btn-hero-primary" style="padding: 10px 18px; font-size: 13px;">
+                <i class="fa-solid fa-plus"></i> Submit Request
+            </a>
+        </div>
+    </div>
 
-    .navbar a:hover {
-        color: #1d4ed8 !important;
-        background: rgba(37, 99, 235, 0.12);
-        transform: translateY(-1px);
-    }
-
-    body {
-        margin: 0;
-        min-height: 100vh;
-        background: linear-gradient(rgba(255,255,255,0.28), rgba(255,255,255,0.28)),
-            url("{{ url_for('static', filename='images/img.webp') }}") center/cover no-repeat;
-        background-attachment: fixed;
-        color: #0f172a;
-    }
-
-    .manager-page {
-        position: relative;
-        min-height: 100vh;
-        padding: 30px 18px 60px;
-        overflow: hidden;
-        background: transparent;
-    }
-
-    .manager-page::before,
-    .manager-page::after {
-        display: none;
-    }
-
-    .manager-panel {
-        max-width: 1200px;
-        margin: 60px auto 0;
-        padding: 30px;
-        border-radius: 28px;
-        background: rgba(255, 255, 255, 0.48);
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        box-shadow: 0 22px 50px rgba(15, 23, 42, 0.10);
-        backdrop-filter: blur(22px);
-    }
-
-    .manager-heading {
-        text-align: center;
-        margin-bottom: 32px;
-        color: #0f172a;
-        font-size: 32px;
-        font-weight: 700;
-        letter-spacing: 0.02em;
-    }
-
-    .top-employee {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        gap: 18px;
-        margin-bottom: 34px;
-        padding: 26px 28px;
-        background: rgba(255, 255, 255, 0.45);
-        border: 1px solid rgba(255, 255, 255, 0.45);
-        border-radius: 22px;
-        backdrop-filter: blur(16px);
-    }
-
-    .top-employee h3 {
-        margin-bottom: 10px;
-        font-size: 20px;
-        color: #0f172a;
-    }
-
-    .top-employee p {
-        margin: 0;
-        color: #334155;
-        font-size: 16px;
-        line-height: 1.6;
-    }
-
-    .search-form {
-        width: 100%;
-        max-width: 780px;
-        margin: 0 auto 36px auto;
-        display: flex;
-        gap: 14px;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-
-    .search-form input {
-        flex: 1;
-        min-width: 220px;
-        padding: 15px 18px;
-        border-radius: 16px;
-        border: 1px solid rgba(148, 163, 184, 0.32);
-        background: rgba(255, 255, 255, 0.88);
-        color: #0f172a;
-        font-size: 15px;
-        line-height: 1.5;
-    }
-
-    .search-form button {
-        padding: 15px 28px;
-        border-radius: 16px;
-        border: none;
-        background: #2563eb;
-        color: white;
-        font-weight: 700;
-        cursor: pointer;
-        transition: transform 0.2s ease, background 0.2s ease;
-    }
-
-    .search-form button:hover {
-        background: #1d4ed8;
-        transform: translateY(-1px);
-    }
-
-    .manager-table {
-        width: 100%;
-        border-collapse: collapse;
-        background: rgba(255, 255, 255, 0.80);
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
-        backdrop-filter: blur(12px);
-    }
-
-    .manager-table th,
-    .manager-table td {
-        padding: 18px 16px;
-        text-align: left;
-        border-bottom: 1px solid rgba(148, 163, 184, 0.22);
-    }
-
-    .manager-table th {
-        background: rgba(241, 245, 249, 0.95);
-        color: #0f172a;
-        font-size: 14px;
-        font-weight: 700;
-    }
-
-    .manager-table tr:hover {
-        background: rgba(238, 242, 255, 0.75);
-    }
-
-    .approved {
-        color: #16a34a;
-        font-weight: 700;
-    }
-
-    .rejected {
-        color: #475569;
-        font-weight: 700;
-    }
-
-    .pending {
-        color: #2563eb;
-        font-weight: 700;
-    }
-
-    .btn {
-        display: inline-block;
-        padding: 10px 16px;
-        border-radius: 9999px;
-        color: white;
-        text-decoration: none;
-        font-size: 13px;
-        font-weight: 700;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .approve-btn {
-        background: #2563eb;
-    }
-
-    .reject-btn {
-        background: #475569;
-    }
-
-    .btn:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 12px 26px rgba(37, 99, 235, 0.18);
-    }
-
-    @media (max-width: 900px) {
-        .manager-panel {
-            padding: 24px;
-        }
-
-        .manager-heading {
-            font-size: 28px;
-        }
-
-        .search-form {
-            gap: 10px;
-        }
-
-        .manager-table th,
-        .manager-table td {
-            padding: 14px 12px;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .top-employee {
-            flex-direction: column;
-            align-items: stretch;
-        }
-
-        .search-form {
-            flex-direction: column;
-        }
-
-        .search-form button {
-            width: 100%;
-        }
-    }
-</style>
-
-<div class="manager-page">
-    <div class="manager-panel">
-        <h2 class="manager-heading">Manager Dashboard</h2>
-
-        <div class="top-employee">
-            <div>
-                <h3>Top Employee (Most Leaves)</h3>
-                <p><strong>{{ top_employee }}</strong> ({{ top_count }} leaves)</p>
+    <!-- Manager KPI Stats -->
+    <div class="stats-grid">
+        <div class="metric-card">
+            <div class="metric-card-content">
+                <span class="metric-title">Total Applications</span>
+                <span class="metric-value">{{ stats.total }}</span>
+                <span class="metric-sub">Cumulative company requests</span>
+            </div>
+            <div class="metric-icon-box icon-blue">
+                <i class="fa-solid fa-folder-open"></i>
             </div>
         </div>
 
-        <form method="GET" action="/manager" class="search-form">
-            <input type="text" name="search" placeholder="Search employee name">
-            <button type="submit">Search</button>
+        <div class="metric-card">
+            <div class="metric-card-content">
+                <span class="metric-title">Pending Decisions</span>
+                <span class="metric-value" style="color: var(--warning-dark);">{{ stats.pending }}</span>
+                <span class="metric-sub">Requiring managerial review</span>
+            </div>
+            <div class="metric-icon-box icon-amber">
+                <i class="fa-solid fa-hourglass-half"></i>
+            </div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-card-content">
+                <span class="metric-title">Approved Leaves</span>
+                <span class="metric-value" style="color: var(--success-dark);">{{ stats.approved }}</span>
+                <span class="metric-sub">Active or past authorizations</span>
+            </div>
+            <div class="metric-icon-box icon-green">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-card-content">
+                <span class="metric-title">AI Automation Accuracy</span>
+                <span class="metric-value" style="color: #4338ca;">{{ stats.auto_approval_rate }}%</span>
+                <span class="metric-sub">System decision alignment</span>
+            </div>
+            <div class="metric-icon-box icon-indigo">
+                <i class="fa-solid fa-microchip"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Requester Intelligence Ribbon -->
+    {% if stats.top_employee != 'None' %}
+    <div style="background: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%); border: 1px solid rgba(37, 99, 235, 0.2); border-radius: var(--radius-lg); padding: 18px 24px; margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="width: 42px; height: 42px; border-radius: 50%; background: white; color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.15);">
+                <i class="fa-solid fa-chart-column"></i>
+            </div>
+            <div>
+                <strong style="color: var(--slate-900); font-size: 15px;">Workforce Absence Trend:</strong>
+                <span style="color: var(--slate-600); font-size: 14px;">
+                    Highest approved days recorded by <strong>{{ stats.top_employee }}</strong> ({{ stats.top_count }} Days cumulative).
+                </span>
+            </div>
+        </div>
+        <span style="font-size: 12px; font-weight: 700; color: var(--primary); background: white; padding: 6px 14px; border-radius: var(--radius-full); border: 1px solid rgba(37, 99, 235, 0.2);">
+            <i class="fa-solid fa-shield-halved"></i> Within Annual 30-Day Policy Cap
+        </span>
+    </div>
+    {% endif %}
+
+    <!-- Filter & Search Bar -->
+    <div style="background: white; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 18px 24px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+        <!-- Status Filter Pills -->
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <a href="/manager?status=all{% if search_query %}&q={{ search_query }}{% endif %}" 
+               style="text-decoration: none; padding: 6px 14px; border-radius: var(--radius-full); font-size: 13px; font-weight: 700; transition: var(--transition);
+               {% if active_filter == 'All' %}background: var(--primary); color: white;{% else %}background: var(--slate-100); color: var(--slate-600);{% endif %}">
+                All ({{ stats.total }})
+            </a>
+            <a href="/manager?status=pending{% if search_query %}&q={{ search_query }}{% endif %}" 
+               style="text-decoration: none; padding: 6px 14px; border-radius: var(--radius-full); font-size: 13px; font-weight: 700; transition: var(--transition);
+               {% if active_filter == 'Pending' %}background: var(--warning); color: white;{% else %}background: var(--slate-100); color: var(--slate-600);{% endif %}">
+                Pending ({{ stats.pending }})
+            </a>
+            <a href="/manager?status=approved{% if search_query %}&q={{ search_query }}{% endif %}" 
+               style="text-decoration: none; padding: 6px 14px; border-radius: var(--radius-full); font-size: 13px; font-weight: 700; transition: var(--transition);
+               {% if active_filter == 'Approved' %}background: var(--success); color: white;{% else %}background: var(--slate-100); color: var(--slate-600);{% endif %}">
+                Approved ({{ stats.approved }})
+            </a>
+            <a href="/manager?status=rejected{% if search_query %}&q={{ search_query }}{% endif %}" 
+               style="text-decoration: none; padding: 6px 14px; border-radius: var(--radius-full); font-size: 13px; font-weight: 700; transition: var(--transition);
+               {% if active_filter == 'Rejected' %}background: var(--danger); color: white;{% else %}background: var(--slate-100); color: var(--slate-600);{% endif %}">
+                Rejected ({{ stats.rejected }})
+            </a>
+        </div>
+
+        <!-- Search Form -->
+        <form method="GET" action="/manager" style="display: flex; gap: 8px;">
+            <input type="hidden" name="status" value="{{ active_filter|lower }}">
+            <input type="text" name="q" value="{{ search_query }}" class="form-input" placeholder="Search by employee name..." style="padding: 8px 14px; width: 240px; font-size: 13px;">
+            <button type="submit" class="btn-submit-primary" style="width: auto; padding: 8px 16px; font-size: 13px;">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
         </form>
+    </div>
 
-        <table class="manager-table">
-            <tr>
-                <th>ID</th>
-                <th>Employee</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Status</th>
-                <th>Probability</th>
-                <th>Action</th>
-            </tr>
-
-            {% for leave in leaves %}
-            <tr>
-                <td>{{ leave._id }}</td>
-                <td>{{ leave.employee_name }}</td>
-                <td>{{ leave.start_date }}</td>
-                <td>{{ leave.end_date }}</td>
-                <td class="{% if leave.status == 'Approved' %}approved{% elif leave.status == 'Rejected' %}rejected{% else %}pending{% endif %}">
-                    {{ leave.status }}
-                </td>
-                <td>{{ leave.probability }}</td>
-                <td>
-                    <a class="btn approve-btn" href="/update_status/{{ leave._id }}/Approved">Approve</a>
-                    <a class="btn reject-btn" href="/update_status/{{ leave._id }}/Rejected">Reject</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
+    <!-- Management Data Table -->
+    <div class="table-card">
+        <div class="table-responsive">
+            <table class="enterprise-table">
+                <thead>
+                    <tr>
+                        <th>Employee Details</th>
+                        <th>Leave Category</th>
+                        <th>Duration</th>
+                        <th>Dates</th>
+                        <th>Reason & Coverage</th>
+                        <th>Current Status</th>
+                        <th>AI Probability</th>
+                        <th>Action & Decision</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if leaves %}
+                        {% for l in leaves %}
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <img src="{{ url_for('static', filename='images/' + l.employee_avatar) }}" 
+                                         alt="{{ l.employee_name }}" 
+                                         style="width: 40px; height: 40px; border-radius: var(--radius-md); object-fit: cover; border: 2px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.1);"
+                                         onerror="this.src='{{ url_for('static', filename='images/aarav.jpg') }}'">
+                                    <div>
+                                        <strong style="color: var(--slate-900); font-size: 14px; display: block;">{{ l.employee_name }}</strong>
+                                        <span style="font-size: 12px; color: var(--slate-500);">{{ l.employee_dept }}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="color: var(--slate-800);">{{ l.leave_type if l.leave_type else 'Casual' }}</strong>
+                                {% if l.priority in ['Urgent', 'Critical'] %}
+                                    <span style="display: block; font-size: 10px; font-weight: 800; color: #dc2626; text-transform: uppercase;">
+                                        <i class="fa-solid fa-triangle-exclamation"></i> {{ l.priority }}
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span style="background: var(--slate-100); padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 12px; color: var(--slate-700);">
+                                    {{ l.duration }} {% if l.duration == 1 %}Day{% else %}Days{% endif %}
+                                </span>
+                            </td>
+                            <td>
+                                <div style="font-weight: 600; color: var(--slate-800); font-size: 13px;">{{ l.start_date }}</div>
+                                <div style="font-size: 11px; color: var(--slate-400);">to {{ l.end_date }}</div>
+                            </td>
+                            <td style="max-width: 220px; font-size: 13px; color: var(--slate-600);">
+                                {{ l.reason if l.reason else 'Standard personal leave' }}
+                            </td>
+                            <td>
+                                {% if l.status == 'Approved' %}
+                                    <span class="badge-status badge-approved">
+                                        <i class="fa-solid fa-circle-check"></i> Approved
+                                    </span>
+                                {% elif l.status == 'Rejected' %}
+                                    <span class="badge-status badge-rejected">
+                                        <i class="fa-solid fa-circle-xmark"></i> Rejected
+                                    </span>
+                                {% else %}
+                                    <span class="badge-status badge-pending">
+                                        <i class="fa-solid fa-clock"></i> Pending Review
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="prob-chip">
+                                    <span class="prob-indicator {% if l.probability >= 0.85 %}prob-high{% elif l.probability >= 0.70 %}prob-mid{% else %}prob-low{% endif %}"></span>
+                                    <span>{{ (l.probability * 100)|round|int }}%</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="display: flex; gap: 6px; align-items: center;">
+                                    <a href="/decision/{{ l._id }}" class="btn-action-view" title="Inspect AI Explanations">
+                                        <i class="fa-solid fa-brain"></i> AI
+                                    </a>
+                                    {% if l.status != 'Approved' %}
+                                    <a href="/update_status/{{ l._id }}/Approved" class="btn-action-approve" title="Approve Request">
+                                        <i class="fa-solid fa-check"></i>
+                                    </a>
+                                    {% endif %}
+                                    {% if l.status != 'Rejected' %}
+                                    <a href="/update_status/{{ l._id }}/Rejected" class="btn-action-reject" title="Reject Request">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="8" style="text-align: center; padding: 40px; color: var(--slate-500);">
+                                <i class="fa-solid fa-magnifying-glass" style="font-size: 32px; color: var(--slate-300); margin-bottom: 10px; display: block;"></i>
+                                No leave records matched the specified filter criteria.
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 {% endblock %}

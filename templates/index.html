@@ -1,303 +1,136 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home page</title>
+{% extends "base.html" %}
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+{% block title %}WorkSphere AI - Enterprise Smart Leave Management System{% endblock %}
 
-        body {
-            background-image: url("{{ url_for('static', filename='images/pexels-jplenio-1103970 (1).jpg') }}");
-            background-size: cover;
-            background-repeat: no-repeat;
-        }
-        .header {
-            text-align: center;
-            padding: 15px 0;
-            position: relative;
-        }
+{% block content %}
+<!-- Enterprise Hero Section -->
+<section class="hero-section">
+    <div class="hero-pill">
+        <i class="fa-solid fa-sparkles"></i> AI-Powered Predictive HRMS Engine
+    </div>
+    <h1 class="hero-title">
+        Intelligent Leave Approvals <br>
+        <span class="gradient-text">Powered by Machine Learning</span>
+    </h1>
+    <p class="hero-sub">
+        Automate leave workflows, predict delivery continuity, and streamline workforce absence requests with explainable Random Forest AI and rule-driven enterprise policies.
+    </p>
 
-        .header h2 {
-            color: white;
-            margin-bottom: 10px;
-        }
-
-        .login a {
-            text-decoration: none;
-            color: white;
-            background-color: rgba(1, 68, 193, 0.75);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 10px 24px;
-            border-radius: 6px;
-            transition: 0.3s;  
-            font-size: 18px;
-            font-weight: 600;
-            display: inline-block;
-            margin: 0 8px;
-            backdrop-filter: blur(8px);
-        }
-
-        .login a:hover {
-            background-color: rgba(1, 68, 193, 0.95);
-            transform: translateY(-2px);
-            border-color: rgba(255, 255, 255, 0.6);
-        }
-
-        .login {
-            position: absolute;
-            top: 30px;
-            right: 30px;
-        }
-
-        .auth-btn {
-            position: relative;
-            display: inline-block;
-        }
-
-        .auth-btn > a {
-            text-decoration: none;
-            color: white;
-            background-color: rgb(1, 68, 193);
-            padding: 10px 28px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .auth-btn > a:hover {
-            background-color: rgb(132, 174, 252);
-            color: rgb(1, 68, 193);
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            right: 0;
-            top: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 8px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-            z-index: 100;
-            min-width: 160px;
-            margin-top: 8px;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 12px 20px;
-            color: rgb(1, 68, 193);
-            text-decoration: none;
-            font-weight: 600;
-            transition: background 0.2s ease;
-        }
-
-        .dropdown-menu a:first-child {
-            border-radius: 8px 8px 0 0;
-        }
-
-        .dropdown-menu a:last-child {
-            border-radius: 0 0 8px 8px;
-        }
-
-        .dropdown-menu a:hover {
-            background: rgba(1, 68, 193, 0.1);
-        }
-
-        .auth-btn:hover .dropdown-menu {
-            display: block;
-        }
-
-        h1 {
-            color: white;
-            text-align: center;
-            margin-top: 10px;
-            text-decoration: none;
-            font-size: 36px;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-        .con {
-            width: 100%;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            justify-content: center;
-            padding: 30px;
-        }
-        .child {
-            height: 250px;
-            width: 270px;
-            border: 1px outset rgb(117, 150, 160);
-            box-shadow: 2px 2px 5px 5px rgb(117, 150, 160);
-            border-radius: 0 0 30px 30px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .child:hover {
-            background-color: #d3f4f9;
-        }
-
-        .pp {
-            height: 250px;
-            width: 240px;
-            margin: auto;
-            position: relative;
-            transition: 1.2s ease;
-        }
-
-        .child:hover .pp {
-            transform: translateY(-60px);
-        }
-
-        .pp img {
-            height: 205px;
-            width: 240px;
-            object-fit: cover;
-            border-radius: 0 0 20px 20px;
-            box-shadow: 0px 0px 2px 2px rgb(216, 238, 252);
-        }
-
-        .name {
-            text-align: center;
-            color: rgb(89, 93, 131);
-            font-size: 27px;
-            margin-top: -80px;
-            font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-        }
-
-        .info {
-           text-align: center;
-            color: rgb(89, 93, 131);
-            font-weight: bold;
-            position: relative;
-            bottom: 0;
-            z-index: 0; 
-        }
-
-        .date {
-            font-size: 16px;
-        }
-
-        .post {
-            font-size: 16px;
-        }
-    </style>
-</head>
-
-<body>
-
-    <!-- Welcome + Login -->
-    <div class="header">
-        <h1> Smart Leave Management System</h1>
-        <h2 style="color: rgba(255,255,255,0.9); font-size: 18px; font-weight: 400; margin-bottom: 20px;">Intelligent leave approval powered by AI</h2>
-        <div class="login">
-            <a href="/login">Login</a>
-            <a href="/register" class="register-btn">Register</a>
-        </div>
+    <div class="hero-cta-group">
+        {% if session.get('username') %}
+            {% if session.get('role') == 'manager' %}
+                <a href="/manager" class="btn-hero-primary">
+                    <i class="fa-solid fa-chart-line"></i> Open Manager Portal
+                </a>
+            {% else %}
+                <a href="/leave" class="btn-hero-primary">
+                    <i class="fa-solid fa-calendar-check"></i> Apply For Leave
+                </a>
+                <a href="/dashboard" class="btn-hero-secondary">
+                    <i class="fa-solid fa-gauge"></i> My Dashboard
+                </a>
+            {% endif %}
+        {% else %}
+            <a href="/login" class="btn-hero-primary">
+                <i class="fa-solid fa-right-to-bracket"></i> Employee / Manager Login
+            </a>
+            <a href="/register" class="btn-hero-secondary">
+                <i class="fa-solid fa-user-plus"></i> Register Employee
+            </a>
+        {% endif %}
     </div>
 
-    <div class="con">
-
-        <div class="child">
-            <div class="pp">
-                <img src="{{ url_for('static', filename='images/pic1.jpeg') }}">
+    <!-- Live Corporate Stats Ribbon -->
+    <div class="stats-ribbon">
+        <div class="stat-chip">
+            <div class="stat-chip-icon">
+                <i class="fa-solid fa-users"></i>
             </div>
-            <p class="name">Prerna Mittal</p>
-            <div class="info">
-                <p class="date">Join:- 15/02/2021</p>
-                <p class="post">post:- Junior Java Developer</p>
-            </div>
-        </div>
-
-        <div class="child">
-            <div class="pp">
-                <img src="{{ url_for('static', filename='images/pic2.avif') }}">
-            </div>
-            <p class="name">Arpita Birla</p>
-            <div class="info">
-                <p class="date">Join:- 02/05/2021</p>
-                <p class="post">post:- Junior Dotnet Developer</p>
+            <div class="stat-chip-info">
+                <div class="stat-chip-value">{{ stats.total_employees }}</div>
+                <div class="stat-chip-label">Active Team Members</div>
             </div>
         </div>
 
-        <div class="child">
-            <div class="pp">
-                <img src="{{ url_for('static', filename='images/pic3.jpeg') }}">
+        <div class="stat-chip">
+            <div class="stat-chip-icon icon-emerald">
+                <i class="fa-solid fa-calendar-day"></i>
             </div>
-            <p class="name">Annu kr. pal</p>
-            <div class="info">
-                <p class="date">Join:- 25/07/2022</p>
-                <p class="post">post:- Programming Analyst</p>
-            </div>
-        </div>
-
-        <div class="child">
-            <div class="pp">
-                <img src="{{ url_for('static', filename='images/pic44.jpg') }}">
-            </div>
-            <p class="name">Shalini Singh</p>
-            <div class="info">
-                <p class="date">Join:- 17/04/2023</p>
-                <p class="post">post:- Software Specialist</p>
+            <div class="stat-chip-info">
+                <div class="stat-chip-value">{{ stats.active_leaves }}</div>
+                <div class="stat-chip-label">On Leave Today</div>
             </div>
         </div>
 
-        <div class="child">
-            <div class="pp">
-                <img src="{{ url_for('static', filename='images/pic5.jpeg') }}">
+        <div class="stat-chip">
+            <div class="stat-chip-icon icon-amber">
+                <i class="fa-solid fa-clipboard-check"></i>
             </div>
-            <p class="name">Anshika Sharma</p>
-            <div class="info">
-                <p class="date">Join:- 09/11/2023</p>
-                <p class="post">post:- C Developer</p>
-            </div>
-        </div>
-
-        <div class="child">
-            <div class="pp">
-                <img src="{{ url_for('static', filename='images/pic6.jpg') }}">
-            </div>
-            <p class="name">Rishita verma</p>
-            <div class="info">
-                <p class="date">Join:- 13/02/2024</p>
-                <p class="post">post:- Full Stack Engineer</p>
+            <div class="stat-chip-info">
+                <div class="stat-chip-value">{{ stats.total_requests }}</div>
+                <div class="stat-chip-label">Total Requests Handled</div>
             </div>
         </div>
 
-        <div class="child">
-            <div class="pp">
-                <img src="{{ url_for('static', filename='images/pic7.avif') }}">
+        <div class="stat-chip">
+            <div class="stat-chip-icon icon-purple">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
             </div>
-            <p class="name">Shreya Dalal</p>
-            <div class="info">
-                <p class="date">Join:- 20/07/2024</p>
-                <p class="post">post:- Game Developer</p>
-            </div>
-        </div>
-
-        <div class="child">
-            <div class="pp">
-                <img src="{{ url_for('static', filename='images/pic8.avif') }}">
-            </div>
-            <p class="name">Anjali Dahiya</p>
-            <div class="info">
-                <p class="date">Join:- 01/03/2025</p>
-                <p class="post">post:- Unity Developer</p>
+            <div class="stat-chip-info">
+                <div class="stat-chip-value">{{ stats.approval_rate }}%</div>
+                <div class="stat-chip-label">AI Decision Accuracy</div>
             </div>
         </div>
+    </div>
+</section>
 
+<!-- Indian Professional Workforce Showcase -->
+<section class="team-showcase">
+    <div class="section-header">
+        <span class="section-tag"><i class="fa-solid fa-building-user"></i> Core Technology & Operations Workforce</span>
+        <h2 class="section-title">Our Professional Engineering & Product Team</h2>
+        <p class="section-sub">Real profiles managed under the WorkSphere automated attendance & leave policy framework</p>
     </div>
 
-</body>
-</html>
+    <div class="employee-cards-grid">
+        {% for emp in employees %}
+        <div class="emp-card">
+            <div class="emp-card-banner">
+                <span class="emp-card-code">{{ emp.emp_code if emp.emp_code else 'NEX-' + loop.index|string }}</span>
+            </div>
+            
+            <div class="emp-card-body">
+                <div class="emp-avatar-wrapper">
+                    <img src="{{ url_for('static', filename='images/' + emp.avatar) }}" 
+                         alt="{{ emp.name }}" 
+                         class="emp-avatar-img"
+                         onerror="this.src='{{ url_for('static', filename='images/aarav.jpg') }}'">
+                    <span class="emp-status-dot" title="Active Workforce"></span>
+                </div>
+
+                <h3 class="emp-card-name">{{ emp.name }}</h3>
+                <p class="emp-card-position">{{ emp.position }}</p>
+                <div class="emp-card-dept">
+                    <i class="fa-solid fa-briefcase"></i> {{ emp.department if emp.department else 'Engineering' }}
+                </div>
+
+                <div class="emp-meta-list">
+                    <div class="emp-meta-item">
+                        <span class="emp-meta-label"><i class="fa-regular fa-calendar"></i> Joined</span>
+                        <span class="emp-meta-value">{{ emp.join_date if emp.join_date else '15/01/2023' }}</span>
+                    </div>
+                    <div class="emp-meta-item">
+                        <span class="emp-meta-label"><i class="fa-solid fa-location-dot"></i> Hub</span>
+                        <span class="emp-meta-value">{{ emp.location if emp.location else 'Bengaluru, India' }}</span>
+                    </div>
+                    <div class="emp-meta-item">
+                        <span class="emp-meta-label"><i class="fa-solid fa-phone"></i> Contact</span>
+                        <span class="emp-meta-value">{{ emp.contact if emp.contact else '+91 98000 00000' }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
