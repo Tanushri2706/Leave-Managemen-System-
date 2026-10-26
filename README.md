@@ -1,3 +1,4 @@
+
 # 🌿 Smart Leave Management System (WorkSphere AI)
 
 An enterprise-grade, AI-assisted Leave Management System featuring an intelligent hybrid decision engine that combines rule-based policies with Scikit-learn machine learning. The system provides real-time analytics and role-based dashboards for employees and HR managers.
@@ -458,3 +459,7 @@ The exact line number may vary depending on the version of `app.py`.
 ---
 
 **End of Documentation**
+
+# Leave-Managemen-System-
+An enterprise-grade, AI-assisted Leave Management System featuring an intelligent hybrid decision engine that combines rule-based policies with Scikit-learn machine learning. The system provides real-time analytics and role-based dashboards for employees and HR managers.
+
